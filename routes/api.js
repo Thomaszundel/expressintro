@@ -62,7 +62,28 @@ router.patch('/:id', function(req,res){
 
 //delete
 router.delete('/:id', function(req,res){
-    res.status(200).json({message:"deleted the resorce"})
+    //capture the id
+    var id = req.params.id;
+
+    //open the file for reading
+    const rawdata = fs.readFileSync('data.json');
+    var students = JSON.parse(rawdata);
+    
+    
+    //if found delete
+    if (students.length > id){
+        students.splice(id,1);
+        //write to file
+        const data = fs.writeFileSync('data.json', JSON.stringify(students))
+
+        res.status(200).json({message: "ok"});
+    }else{
+        res.status(500).json({message: "Somthing went wrong"})
+    }
+
+    //if no item found throw error
+
+   
 });
 
 
