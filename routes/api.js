@@ -24,6 +24,20 @@ router.get('/',function(req,res){
     }
     
 });
+router.get('/:id',function(req,res){
+    try{
+        var rawdata = fs.readFileSync('data.json'); //buffer <hex code>
+        var students = JSON.parse(rawdata);
+    
+        console.log(students);
+    
+        res.status(200).json(students[req.params.id]);
+
+    } catch(err){
+        res.status(500).json({message: err.message});
+    }
+    
+});
 
 //create a new resorce
 router.post('/',function(req,res){
@@ -57,7 +71,7 @@ router.post('/',function(req,res){
         
         //get real index
         newObj._id = students.length;
-        
+
         // add new object
         students.push(newObj);
         //save (write data back to file)
@@ -76,7 +90,43 @@ router.post('/',function(req,res){
 
 //update
 router.patch('/:id', function(req,res){
-    res.status(200).json({message:"edited the resorce"})
+        try{
+            console.log("Object being pached is: ", req.params.id, req.body);
+            //open the file
+            const rawdata = fs.readFileSync('data.json');
+    
+            //decode the file
+            var students = JSON.parse(rawdata);
+    
+            //control data added
+            var id = req.params.id;
+            var rawBody = req.body;
+
+            
+            
+    
+            
+            if(rawBody.name != null){
+                students[id].name = rawBody.name;
+            }
+            if(rawBody.age != null){
+                students[id].age = rawBody.age;
+            }
+            if(rawBody.currentGame != null){
+                students[id].currentGame = rawBody.currentGame;
+            }
+            
+            //save (write data back to file)
+            const data = fs.writeFileSync('data.json', JSON.stringify(students))
+            //return data
+            res.status(200).json(students[id]);
+            
+    
+        } catch(err){
+            res.status(500).json({message:err.message});
+    
+        }
+    
 });
 
 //delete
