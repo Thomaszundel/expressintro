@@ -35,10 +35,29 @@ router.post('/',function(req,res){
         //decode the file
         var students = JSON.parse(rawdata);
 
-        var newObj = req.body;
+        //control data added
+        var rawBody = req.body;
 
-        newObj._id =1;
+        var newObj = {
+            name: null,
+            age: null,
+            currentGame: null
+        };
 
+        
+        if(rawBody.name != null){
+            newObj.name = rawBody.name;
+        }
+        if(rawBody.age != null){
+            newObj.age = rawBody.age;
+        }
+        if(rawBody.currentGame != null){
+            newObj.currentGame = rawBody.currentGame;
+        }
+        
+        //get real index
+        newObj._id = students.length;
+        
         // add new object
         students.push(newObj);
         //save (write data back to file)
