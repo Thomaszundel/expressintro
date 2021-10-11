@@ -29,7 +29,10 @@ router.get('/:id',function(req,res){
         var rawdata = fs.readFileSync('data.json'); //buffer <hex code>
         var students = JSON.parse(rawdata);
     
-        console.log(students);
+        console.log(students[req.params.id]);
+
+        
+
     
         res.status(200).json(students[req.params.id]);
 
@@ -38,6 +41,7 @@ router.get('/:id',function(req,res){
     }
     
 });
+
 
 //create a new resorce
 router.post('/',function(req,res){
@@ -101,11 +105,6 @@ router.patch('/:id', function(req,res){
             //control data added
             var id = req.params.id;
             var rawBody = req.body;
-
-            
-            
-    
-            
             if(rawBody.name != null){
                 students[id].name = rawBody.name;
             }
@@ -141,6 +140,7 @@ router.delete('/:id', function(req,res){
     
     //if found delete
     if (students.length > id){
+
         students.splice(id,1);
         //write to file
         const data = fs.writeFileSync('data.json', JSON.stringify(students))
